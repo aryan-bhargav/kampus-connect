@@ -1,0 +1,44 @@
+/* :root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+} */
+/* index.css */
+
+/* Light Mode */
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --background-dark: #111111;
+  --foreground-dark: #ffffff;
+}
+
+/* Dark Mode */
+html.dark {
+  --background: #111111;
+  --foreground: #ffffff;
+  --background-dark: #000000;
+  --foreground-dark: #cccccc;
+}
+
+/* Apply background and foreground globally */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode styles */
+html.dark body {
+  background-color: var(--background-dark);
+  color: var(--foreground-dark);
+}
