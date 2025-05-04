@@ -5,7 +5,10 @@ import L from "leaflet";
 import axios from "axios";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:8000");
+// Use environment variable for backend API URL
+const BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
+const socket = io(`${BASE_URL}`);
+
 
 // Fix Leaflet marker issue
 import iconUrl from "leaflet/dist/images/marker-icon.png";
@@ -60,7 +63,7 @@ const RealtimeMap = ({ userId, username }) => {
                     setLocation({ latitude, longitude });
 
                     try {
-                        await axios.post("http://localhost:8000/api/location", {
+                        await axios.post(`${BASE_URL}/api/location`, {
                             userId,
                             username,
                             latitude,
@@ -90,7 +93,7 @@ const RealtimeMap = ({ userId, username }) => {
 
             try {
                 console.log("Fetching nearby users for userId:", userId);
-                const { data } = await axios.get("http://localhost:8000/api/location/nearby", {
+                const { data } = await axios.get(`${BASE_URL}/api/location/nearby`, {
                     params: { userId },
                     withCredentials: true,
                 });

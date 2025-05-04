@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+    const BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
     const [menuOpen, setMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
@@ -11,7 +12,7 @@ function Navbar() {
 
     const checkLoginStatus = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/auth/me", { withCredentials: true });
+            const response = await axios.get(`${BASE_URL}/api/auth/me`, { withCredentials: true });
             if (response.data) {
                 setIsLoggedIn(true);
                 setUser(response.data);
@@ -31,7 +32,7 @@ function Navbar() {
 
     const handleLogout = async () => {
         try {
-            await axios.post("http://localhost:8000/api/auth/logout", {}, { withCredentials: true });
+            await axios.post(`${BASE_URL}/api/auth/logout`, {}, { withCredentials: true });
             setIsLoggedIn(false);
             setUser(null);
             navigate("/");
@@ -54,12 +55,12 @@ function Navbar() {
             <ul className={`absolute sm:static top-14 right-0 bg-gray-900 sm:bg-transparent w-full sm:w-auto flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 p-4 sm:p-0 transition-all duration-300 ${menuOpen ? "block" : "hidden sm:flex"}`}>
                 {isLoggedIn ? (
                     <>
-                        {[
-                            { to: "/", label: "Home" },
-                            { to: "/dashboard", label: "Dashboard" },
-                            { to: "/searchuser", label: "Search" },
-                            { to: "/profile", label: "Profile" },
-                            { to: "/messages", label: "Messages" },
+                        {[ 
+                            { to: "/", label: "Home" }, 
+                            { to: "/dashboard", label: "Dashboard" }, 
+                            { to: "/searchuser", label: "Search" }, 
+                            { to: "/profile", label: "Profile" }, 
+                            { to: "/messages", label: "Messages" }, 
                             { to: "/settings", label: "Settings" }
                         ].map(({ to, label }) => (
                             <li key={to}>
@@ -79,8 +80,12 @@ function Navbar() {
                     </>
                 ) : (
                     <>
-                        <li><NavLink to="/login" className={({ isActive }) => `text-white px-3 py-1 rounded-lg transition-all duration-300 ${isActive ? "bg-white/20 backdrop-blur-md border border-white/30 shadow-md" : "hover:text-gray-400"}`}>Login</NavLink></li>
-                        <li><NavLink to="/signup" className={({ isActive }) => `text-white px-3 py-1 rounded-lg transition-all duration-300 ${isActive ? "bg-white/20 backdrop-blur-md border border-white/30 shadow-md" : "hover:text-gray-400"}`}>Sign Up</NavLink></li>
+                        <li>
+                            <NavLink to="/login" className={({ isActive }) => `text-white px-3 py-1 rounded-lg transition-all duration-300 ${isActive ? "bg-white/20 backdrop-blur-md border border-white/30 shadow-md" : "hover:text-gray-400"}`}>Login</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/signup" className={({ isActive }) => `text-white px-3 py-1 rounded-lg transition-all duration-300 ${isActive ? "bg-white/20 backdrop-blur-md border border-white/30 shadow-md" : "hover:text-gray-400"}`}>Sign Up</NavLink>
+                        </li>
                     </>
                 )}
             </ul>

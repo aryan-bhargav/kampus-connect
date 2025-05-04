@@ -3,6 +3,9 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { FaUser, FaEnvelope, FaLock, FaUniversity, FaCodeBranch, FaChevronDown } from "react-icons/fa";
 
+
+const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
+
 const Signup = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -21,7 +24,7 @@ const Signup = () => {
     const [showBranchDropdown, setShowBranchDropdown] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/auth/colleges")
+        axios.get(`${API_BASE_URL}/api/auth/colleges`)
             .then(response => {
                 setColleges(response.data);
                 setFilteredColleges(response.data);
@@ -30,7 +33,7 @@ const Signup = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/auth/branches")
+        axios.get(`${API_BASE_URL}/api/auth/branches`)
             .then(response => {
                 const branchList = response.data.map(branch => ({ name: branch }));
                 setBranches(branchList);
@@ -41,7 +44,7 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch("http://localhost:8000/api/auth/signup", {
+        const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password, college, branch, section }),

@@ -3,12 +3,13 @@ import { Navigate, Outlet } from "react-router-dom";
 import axios from "axios";
 
 const ProtectedRoute = () => {
+  const BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
   const [isAuthenticated, setIsAuthenticated] = useState(null); // null for loading state
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/auth/me", { withCredentials: true });
+        const response = await axios.get(`${BASE_URL}/api/auth/me`, { withCredentials: true });
         if (response.status === 200) {
           setIsAuthenticated(true);
         }

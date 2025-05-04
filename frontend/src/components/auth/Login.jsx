@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaRocket } from "react-icons/fa";
 
+// ✅ Use .env value
+const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
+
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -15,17 +18,16 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:8000/api/auth/login", {
-                email,
-                password,
-            }, {
-                withCredentials: true, 
-            });
+            const response = await axios.post(
+                `${API_BASE_URL}/api/auth/login`,
+                { email, password },
+                { withCredentials: true }
+            );
 
             if (response.status === 200) {
-                Cookies.set("token", response.data.token, { expires: 7 }); 
+                Cookies.set("token", response.data.token, { expires: 7 });
                 alert("Login Successful");
-                navigate("/"); 
+                navigate("/");
             }
         } catch (err) {
             setError("Invalid credentials. Please try again.");
@@ -34,9 +36,6 @@ const Login = () => {
 
     return (
         <section className="relative flex flex-col items-center justify-center h-screen px-6 text-white">
-            {/* ✅ No need for extra background, it comes from Background.jsx */}
-
-            {/* Login Card with Glassmorphism */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -46,7 +45,7 @@ const Login = () => {
                 <h2 className="text-3xl font-bold mb-6 text-center">Login to Kampuss</h2>
 
                 {error && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="bg-red-500 text-white p-2 rounded-md text-sm mb-4 text-center"
@@ -92,7 +91,8 @@ const Login = () => {
 
                 <div className="mt-4 text-center">
                     <p className="text-sm text-gray-400">
-                        Don't have an account? <a href="/signup" className="font-medium text-blue-500 hover:text-blue-400">Sign up</a>
+                        Don't have an account?{" "}
+                        <a href="/signup" className="font-medium text-blue-500 hover:text-blue-400">Sign up</a>
                     </p>
                 </div>
             </motion.div>

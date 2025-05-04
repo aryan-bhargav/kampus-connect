@@ -6,12 +6,16 @@ const FriendRequestsPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
+ 
     // Fetch pending friend requests
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/friends", { withCredentials: true });
-                setRequests(response.data.friendRequests);  // Get pending requests
+                const response = await axios.get(`${BASE_URL}/api/friends`, {
+                    withCredentials: true,
+                });
+                setRequests(response.data.friendRequests);
             } catch (err) {
                 console.error("Error fetching requests:", err);
                 setError("Failed to load friend requests.");
@@ -21,13 +25,15 @@ const FriendRequestsPage = () => {
         };
 
         fetchRequests();
-    }, []);
+    }, [BASE_URL]);
 
     // Accept friend request
     const acceptRequest = async (senderId) => {
         try {
-            await axios.post(`http://localhost:8000/api/accept-request/${senderId}`, {}, { withCredentials: true });
-            setRequests(prev => prev.filter(req => req._id !== senderId));  // Remove accepted request from UI
+            await axios.post(`${BASE_URL}/api/accept-request/${senderId}`, {}, {
+                withCredentials: true,
+            });
+            setRequests((prev) => prev.filter((req) => req._id !== senderId));
         } catch (err) {
             console.error("Error accepting request:", err.response?.data || err.message);
         }

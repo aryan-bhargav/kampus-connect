@@ -5,12 +5,12 @@ const SendRequest = ({ userId }) => {
     const [requestSent, setRequestSent] = useState(false);
     const [senderId, setSenderId] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
     useEffect(() => {
         // Fetch the current user's ID from the `/me` API
         const fetchUserId = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/auth/me", { withCredentials: true });
+                const response = await axios.get(`${BASE_URL}/api/auth/me`, { withCredentials: true });
                 setSenderId(response.data._id); // Store sender ID
             } catch (error) {
                 console.error("Error fetching user ID:", error.response?.data || error.message);
@@ -30,7 +30,7 @@ const SendRequest = ({ userId }) => {
 
         try {
             const response = await axios.post(
-                `http://localhost:8000/api/users/friend-request/${userId}`,
+                `${BASE_URL}/api/users/friend-request/${userId}`,
                 { senderId }, 
                 { withCredentials: true }
             );

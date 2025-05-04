@@ -3,6 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 
 const Profile = () => {
+    const BASE_URL = import.meta.env.VITE_BACKEND_API_URL; // Fetch API URL from environment variable
     const [id, setId] = useState(null);
     const [username, setUsername] = useState("");
     const [currentUsername, setCurrentUsername] = useState("");
@@ -10,18 +11,18 @@ const Profile = () => {
     const [isAvailable, setIsAvailable] = useState(null);
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/auth/me", { withCredentials: true })
+        axios.get(`${BASE_URL}/api/auth/me`, { withCredentials: true })
             .then(response => {
                 setId(response.data._id);
                 setCurrentUsername(response.data.username || "Not Set");
             })
             .catch(error => console.error("Error fetching user data:", error));
-    }, []);
+    }, [BASE_URL]);
 
     const checkUsernameAvailability = async () => {
         if (!username) return;
         try {
-            const response = await axios.get(`http://localhost:8000/api/users/check-username?username=${username}`);
+            const response = await axios.get(`${BASE_URL}/api/users/check-username?username=${username}`);
             setMessage(response.data.message);
             setIsAvailable(true);
         } catch (error) {
@@ -34,7 +35,7 @@ const Profile = () => {
         if (!isAvailable || !id) return;
         try {
             const response = await axios.put(
-                "http://localhost:8000/api/users/update-username",
+                `${BASE_URL}/api/users/update-username`,
                 { id, username },
                 { withCredentials: true }
             );

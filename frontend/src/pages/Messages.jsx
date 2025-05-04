@@ -3,19 +3,20 @@ import axios from "axios";
 import { motion } from "framer-motion";
 
 const Messages = () => {
+    const BASE_URL = import.meta.env.VITE_BACKEND_API_URL; // Fetch API URL from environment variable
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/messages", { withCredentials: true })
+        axios.get(`${BASE_URL}/api/messages`, { withCredentials: true })
             .then(response => setMessages(response.data))
             .catch(error => console.error("Error fetching messages:", error));
-    }, []);
+    }, [BASE_URL]);
 
     const sendMessage = async () => {
         if (!newMessage.trim()) return;
         try {
-            const response = await axios.post("http://localhost:8000/api/messages", { text: newMessage }, { withCredentials: true });
+            const response = await axios.post(`${BASE_URL}/api/messages`, { text: newMessage }, { withCredentials: true });
             setMessages([...messages, response.data]);
             setNewMessage("");
         } catch (error) {

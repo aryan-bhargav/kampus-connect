@@ -5,6 +5,9 @@ import { motion } from "framer-motion";
 import FriendsList from "../components/FriendsList";
 import RealtimeMap from "../components/RealtimeMap";
 
+// ✅ Ensure BASE_URL is fetched from the environment variable
+const BASE_URL = import.meta.env.VITE_BACKEND_API_URL || "http://localhost:8000"; // Fallback to localhost if not defined
+
 const Dashboard = () => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
@@ -12,12 +15,14 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await axios.get("http://localhost:8000/api/auth/me", {
+                const res = await axios.get(`${BASE_URL}/api/auth/me`, {
                     withCredentials: true,
                 });
                 setUser(res.data);
             } catch (error) {
                 console.error("Error fetching user:", error);
+                // Redirect to login page if the user is not authenticated
+                navigate("/login");
             }
         };
 
@@ -42,7 +47,8 @@ const Dashboard = () => {
                 {/* Realtime Map Section */}
                 <div className="md:w-2/3 bg-white/10 backdrop-blur-lg p-4 rounded-lg shadow-md border border-white/15 w-full mt-4 md:mt-0 md:ml-4">
                     <h3 className="text-lg font-semibold border-b border-white/20 pb-2 mb-3">Realtime Map</h3>
-                    <RealtimeMap userId={user?._id} username={user?.name} />
+                    {/* Check if user data exists before passing to RealtimeMap */}
+                    {user && <RealtimeMap userId={user?._id} username={user?.name} />}
                 </div>
             </motion.div>
         </section>

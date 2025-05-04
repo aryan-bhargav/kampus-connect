@@ -7,6 +7,9 @@ import RecentSearches from "../components/search/RecentSearches";
 import FriendsList from "../components/FriendsList";
 
 const SearchUser = () => {
+    // Get the base URL from the environment variables
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     const [searchResults, setSearchResults] = useState([]);
     const [recentSearches, setRecentSearches] = useState([]);
     const [suggestedFriends, setSuggestedFriends] = useState([]);
@@ -18,16 +21,16 @@ const SearchUser = () => {
         setRecentSearches(storedSearches);
 
         // Fetch suggested friends
-        axios.get("http://localhost:8000/api/users/suggested-friends", { withCredentials: true })
+        axios.get(`${BASE_URL}/api/users/suggested-friends`, { withCredentials: true })
             .then(response => setSuggestedFriends(response.data))
             .catch(error => console.error("Error fetching suggested friends:", error));
 
         // Fetch friend requests
-        axios.get("http://localhost:8000/api/users/friends", { withCredentials: true })
+        axios.get(`${BASE_URL}/api/users/friends`, { withCredentials: true })
             .then(response => console.log(response.data))
             .catch(error => console.error("Error fetching friends and friend requests:", error));
 
-    }, []);
+    }, [BASE_URL]);
 
     const handleSearch = async (query) => {
         if (!(query.username?.trim() || query.college?.trim() || query.branch?.trim())) {
@@ -42,7 +45,7 @@ const SearchUser = () => {
             if (query.college?.trim()) params.college = query.college.trim();
             if (query.branch?.trim()) params.branch = query.branch.trim();
 
-            const response = await axios.get("http://localhost:8000/api/users/search", {
+            const response = await axios.get(`${BASE_URL}/api/users/search`, {
                 params,
                 withCredentials: true
             });
@@ -64,7 +67,7 @@ const SearchUser = () => {
 
     const acceptRequest = async (senderId) => {
         try {
-            await axios.post(`http://localhost:8000/api/accept-request/${senderId}`, {}, { withCredentials: true });
+            await axios.post(`${BASE_URL}/api/accept-request/${senderId}`, {}, { withCredentials: true });
             setFriendRequests(prev => prev.filter(req => req._id !== senderId));
         } catch (err) {
             console.error("Error accepting request:", err.response?.data || err.message);

@@ -3,6 +3,8 @@ import axios from "axios";
 import { FaSearch, FaUser, FaUniversity, FaCodeBranch } from "react-icons/fa";
 
 const SearchBar = ({ onSearch }) => {
+    const BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
+ 
     const [username, setUsername] = useState("");
     const [college, setCollege] = useState("");
     const [branch, setBranch] = useState("");
@@ -10,11 +12,11 @@ const SearchBar = ({ onSearch }) => {
     const [branches, setBranches] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:8000/api/auth/colleges")
+        axios.get(`${BASE_URL}/api/auth/colleges`)
             .then(response => setColleges(response.data))
             .catch(error => console.error("Error fetching colleges:", error));
 
-        axios.get("http://localhost:8000/api/auth/branches")
+        axios.get(`${BASE_URL}/api/auth/branches`)
             .then(response => setBranches(response.data))
             .catch(error => console.error("Error fetching branches:", error));
     }, []);

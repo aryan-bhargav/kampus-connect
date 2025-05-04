@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { FaRocket } from "react-icons/fa";
 
 const Home = () => {
+  const BASE_URL = import.meta.env.VITE_BACKEND_API_URL; // Fetch API URL from environment variable
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +13,7 @@ const Home = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/getUser", {
+        const response = await axios.get(`${BASE_URL}/api/getUser`, {
           withCredentials: true,
         });
         setUser(response.data);
@@ -25,7 +26,7 @@ const Home = () => {
     };
 
     fetchUserData();
-  }, []);
+  }, [BASE_URL]); // Make sure the base URL is considered as a dependency
 
   if (loading) {
     return (

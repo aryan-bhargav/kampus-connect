@@ -4,15 +4,19 @@ const FriendsList = () => {
     const [friendRequests, setFriendRequests] = useState([]);
     const [friends, setFriends] = useState([]);
 
+    const BASE_URL = process.env.REACT_APP_BACKEND_API_URL;
+
     useEffect(() => {
         fetchFriends();
     }, []);
 
     const fetchFriends = async () => {
         try {
-            const response = await fetch("http://localhost:8000/api/users/friends", {
+            const response = await fetch(`${BASE_URL}/api/users/friends`, {
                 method: "GET",
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
             });
             const data = await response.json();
             setFriends(data.friends);
@@ -24,9 +28,11 @@ const FriendsList = () => {
 
     const acceptRequest = async (id) => {
         try {
-            await fetch(`http://localhost:5000/api/users/accept-request/${id}`, {
+            await fetch(`${BASE_URL}/api/users/accept-request/${id}`, {
                 method: "POST",
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
             });
             fetchFriends(); // Refresh the list
         } catch (error) {

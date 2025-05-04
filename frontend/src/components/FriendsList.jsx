@@ -5,11 +5,11 @@ const FriendsList = () => {
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/users/friends", {
+        const response = await axios.get(`${BASE_URL}/api/users/friends`, {
           withCredentials: true,
         });
 

@@ -6,18 +6,23 @@ const Settings = () => {
     const [notifications, setNotifications] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
 
+    // Using the base URL from environment variables
+    const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     useEffect(() => {
-        axios.get("http://localhost:8000/api/settings", { withCredentials: true })
+        // Replace hardcoded URL with dynamic BASE_URL
+        axios.get(`${BASE_URL}/settings`, { withCredentials: true })
             .then(response => {
                 setNotifications(response.data.notifications);
                 setDarkMode(response.data.darkMode);
             })
             .catch(error => console.error("Error fetching settings:", error));
-    }, []);
+    }, [BASE_URL]);
 
     const updateSettings = async () => {
         try {
-            await axios.put("http://localhost:8000/api/settings", { notifications, darkMode }, { withCredentials: true });
+            // Replace hardcoded URL with dynamic BASE_URL
+            await axios.put(`${BASE_URL}/settings`, { notifications, darkMode }, { withCredentials: true });
             alert("Settings updated");
         } catch (error) {
             console.error("Error updating settings:", error);
