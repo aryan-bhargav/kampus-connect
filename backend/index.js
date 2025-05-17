@@ -6,16 +6,18 @@ const { Server } = require("socket.io");
 const http = require("http");
 const connectDB = require("./config/db.js");
 
+// Route imports
 const authRoutes = require("./routes/authRoute.js");
 const locationRoutes = require("./routes/locationRoute.js");
 const userRoutes = require("./routes/userRoutes.js");
 const getUserRoute = require("./routes/getUserRoute.js");
 
+// Config
 dotenv.config();
 const PORT = process.env.PORT || 8000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
-// Create express app and HTTP server
+// Initialize app and server
 const app = express();
 const server = http.createServer(app);
 
@@ -26,9 +28,9 @@ connectDB();
 app.use(cors({
   origin: FRONTEND_URL,
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
+
 app.use(cookieParser());
 app.use(express.json());
 
@@ -46,14 +48,15 @@ server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-// Socket.io
+// Socket.io Setup
 const io = new Server(server, {
   cors: {
     origin: FRONTEND_URL,
-    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
+    methods: ["GET", "POST"],
   },
-  pingTimeout: 60000, // Optional: Helps manage reconnection
+  pingTimeout: 70000,
+  pingInterval: 25000,
 });
 
 io.on("connection", (socket) => {
